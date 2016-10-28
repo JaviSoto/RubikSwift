@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF0F33401DC3F70800974B54 /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F333F1DC3F70800974B54 /* Dictionary+Extensions.swift */; };
+		BF0F33421DC403AB00974B54 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33411DC403AB00974B54 /* Array+Extensions.swift */; };
 		BFE194D61DC3C5AB00DB3DBF /* RubikSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */; };
-		BFE194DB1DC3C5AB00DB3DBF /* RubikSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE194DA1DC3C5AB00DB3DBF /* RubikSwiftTests.swift */; };
+		BFE194DB1DC3C5AB00DB3DBF /* CubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */; };
 		BFE194DD1DC3C5AB00DB3DBF /* RubikSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BFE194E71DC3C5D700DB3DBF /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE194E61DC3C5D700DB3DBF /* Cube.swift */; };
+		BFF057371DC3D3A600D4FD2F /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF057361DC3D3A600D4FD2F /* Move.swift */; };
+		BFF057391DC3D54C00D4FD2F /* MoveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF057381DC3D54C00D4FD2F /* MoveTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +28,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BF0F333F1DC3F70800974B54 /* Dictionary+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extensions.swift"; sourceTree = "<group>"; };
+		BF0F33411DC403AB00974B54 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubikSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RubikSwift.h; sourceTree = "<group>"; };
 		BFE194D01DC3C5AB00DB3DBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFE194D51DC3C5AB00DB3DBF /* RubikSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RubikSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFE194DA1DC3C5AB00DB3DBF /* RubikSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubikSwiftTests.swift; sourceTree = "<group>"; };
+		BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeTests.swift; sourceTree = "<group>"; };
 		BFE194DC1DC3C5AB00DB3DBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFE194E61DC3C5D700DB3DBF /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
+		BFF057361DC3D3A600D4FD2F /* Move.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		BFF057381DC3D54C00D4FD2F /* MoveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +60,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF0F333E1DC3F6FD00974B54 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BF0F333F1DC3F70800974B54 /* Dictionary+Extensions.swift */,
+				BF0F33411DC403AB00974B54 /* Array+Extensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		BFE194C21DC3C5AB00DB3DBF = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +90,7 @@
 		BFE194CE1DC3C5AB00DB3DBF /* RubikSwift */ = {
 			isa = PBXGroup;
 			children = (
+				BFE194E81DC3C5DC00DB3DBF /* Code */,
 				BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */,
 				BFE194D01DC3C5AB00DB3DBF /* Info.plist */,
 			);
@@ -80,10 +100,21 @@
 		BFE194D91DC3C5AB00DB3DBF /* RubikSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				BFE194DA1DC3C5AB00DB3DBF /* RubikSwiftTests.swift */,
+				BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */,
+				BFF057381DC3D54C00D4FD2F /* MoveTests.swift */,
 				BFE194DC1DC3C5AB00DB3DBF /* Info.plist */,
 			);
 			path = RubikSwiftTests;
+			sourceTree = "<group>";
+		};
+		BFE194E81DC3C5DC00DB3DBF /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				BF0F333E1DC3F6FD00974B54 /* Extensions */,
+				BFE194E61DC3C5D700DB3DBF /* Cube.swift */,
+				BFF057361DC3D3A600D4FD2F /* Move.swift */,
+			);
+			name = Code;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,6 +180,7 @@
 					BFE194CB1DC3C5AB00DB3DBF = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 6V6XY979JQ;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 					BFE194D41DC3C5AB00DB3DBF = {
@@ -198,6 +230,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFF057371DC3D3A600D4FD2F /* Move.swift in Sources */,
+				BFE194E71DC3C5D700DB3DBF /* Cube.swift in Sources */,
+				BF0F33401DC3F70800974B54 /* Dictionary+Extensions.swift in Sources */,
+				BF0F33421DC403AB00974B54 /* Array+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +241,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFE194DB1DC3C5AB00DB3DBF /* RubikSwiftTests.swift in Sources */,
+				BFF057391DC3D54C00D4FD2F /* MoveTests.swift in Sources */,
+				BFE194DB1DC3C5AB00DB3DBF /* CubeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +359,7 @@
 		BFE194E11DC3C5AB00DB3DBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 6V6XY979JQ;
@@ -334,6 +372,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = es.javisoto.RubikSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -341,6 +380,7 @@
 		BFE194E21DC3C5AB00DB3DBF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 6V6XY979JQ;
@@ -360,6 +400,7 @@
 		BFE194E41DC3C5AB00DB3DBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 6V6XY979JQ;
 				INFOPLIST_FILE = RubikSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -372,6 +413,7 @@
 		BFE194E51DC3C5AB00DB3DBF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 6V6XY979JQ;
 				INFOPLIST_FILE = RubikSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -400,6 +442,7 @@
 				BFE194E21DC3C5AB00DB3DBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BFE194E31DC3C5AB00DB3DBF /* Build configuration list for PBXNativeTarget "RubikSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -408,6 +451,7 @@
 				BFE194E51DC3C5AB00DB3DBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
