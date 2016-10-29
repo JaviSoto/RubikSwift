@@ -16,6 +16,12 @@ extension Array {
     }
 }
 
+extension Int {
+    static func random(in range: CountableClosedRange<Int>) -> Int {
+        return Int(arc4random_uniform(UInt32(range.upperBound - range.lowerBound))) + range.lowerBound
+    }
+}
+
 extension Move {
     public static var random: Move {
         return Move(face: Face.all.random, magnitude: Magnitude.all.random)
