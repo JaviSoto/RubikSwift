@@ -105,8 +105,8 @@ extension Face {
             }
         case .back:
             switch location {
-            case .topLeftBack, .bottomLeftBack: return .rotatedClockwise
-            case .topRightBack, .bottomRightBack: return .rotatedCounterClockwise
+            case .topLeftBack, .bottomLeftBack: return .rotatedCounterClockwise
+            case .topRightBack, .bottomRightBack: return .rotatedClockwise
             default: fatalError("Invalid location for the back face")
             }
         case .left:
@@ -139,29 +139,31 @@ extension Cube {
             self.rotatePiecesClockwise(in: move.face)
         }
     }
+
+    public mutating func apply(_ moves: [Move]) {
+        for move in moves {
+            self.apply(move)
+        }
+    }
 }
 
 extension Cube {
     mutating func flipEdges(in face: Face) {
         let edgeLocations = Set(EdgeLocation.locations(in: face))
 
-        let edges = self.pieces.edges.mapValues { edgeLocations.contains($0) ? $1.flipped : $1 }
-
-        self.pieces = Pieces(edges: edges, corners: self.pieces.corners)
+        self.pieces.edges.map { edgeLocations.contains($0) ? $1.flipped : $1 }
     }
 
     mutating func rotateCorners(in face: Face) {
         let cornerLocations = Set(CornerLocation.locations(in: face))
 
-        let corners = self.pieces.corners.mapValues { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
+        self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
             guard cornerLocations.contains(location) else { return corner }
 
             let rotation = face.cornerOrientationChangeAfterClockwiseTurn(in: location)
 
             return corner + rotation
         }
-
-        self.pieces = Pieces(edges: self.pieces.edges, corners: corners)
     }
 
     mutating func rotatePiecesClockwise(in face: Face) {
@@ -173,13 +175,35 @@ extension Cube {
 
         // This relies on the fact that the locations are returned in clockwise order
         for (index, edgeLocation) in edgeLocations.enumerated() {
-            rotatedPieces.edges[edgeLocations[wrapping: index + 1]] = piecesBeforeRotation.edges[edgeLocation]!
+            rotatedPieces.edges[edgeLocations[wrapping: index + 1]] = piecesBeforeRotation.edges[edgeLocation]
         }
 
         for (index, cornerLocation) in cornerLocations.enumerated() {
-            rotatedPieces.corners[cornerLocations[wrapping: index + 1]] = piecesBeforeRotation.corners[cornerLocation]!
+            rotatedPieces.corners[cornerLocations[wrapping: index + 1]] = piecesBeforeRotation.corners[cornerLocation]
         }
 
         self.pieces = rotatedPieces
+    }
+}
+
+extension Move.Magnitude: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .clockwiseQuarterTurn: return ""
+        case .counterClockwiseQuarterTurn: return "'"
+        case .halfTurn: return "2"
+        }
+    }
+}
+
+extension Move: CustomStringConvertible {
+    public var description: String {
+        return "\(self.face)\(self.magnitude)"
+    }
+}
+
+extension Collection where Iterator.Element == Move {
+    var description: String {
+        return self.map { $0.description }.joined(separator: " ")
     }
 }
