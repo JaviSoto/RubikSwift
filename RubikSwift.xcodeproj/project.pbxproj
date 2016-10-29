@@ -11,6 +11,13 @@
 		BF0F33441DC40E6600974B54 /* GeneticsSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33431DC40E6600974B54 /* GeneticsSolver.swift */; };
 		BF0F33461DC410F500974B54 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33451DC410F500974B54 /* Random.swift */; };
 		BF0F33481DC412A800974B54 /* GeneticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33471DC412A800974B54 /* GeneticsTests.swift */; };
+		BF9E08D41DC51E4E001C0946 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E08D31DC51E4E001C0946 /* AppDelegate.swift */; };
+		BF9E08D61DC51E4E001C0946 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E08D51DC51E4E001C0946 /* ViewController.swift */; };
+		BF9E08D91DC51E4E001C0946 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF9E08D71DC51E4E001C0946 /* Main.storyboard */; };
+		BF9E08DB1DC51E4E001C0946 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF9E08DA1DC51E4E001C0946 /* Assets.xcassets */; };
+		BF9E08DE1DC51E4E001C0946 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF9E08DC1DC51E4E001C0946 /* LaunchScreen.storyboard */; };
+		BF9E08E51DC51F20001C0946 /* RubikSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */; };
+		BF9E08E71DC51F2B001C0946 /* RubikSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BFE194D61DC3C5AB00DB3DBF /* RubikSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */; };
 		BFE194DB1DC3C5AB00DB3DBF /* CubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */; };
 		BFE194DD1DC3C5AB00DB3DBF /* RubikSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,6 +27,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BF9E08E31DC51F1C001C0946 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFE194C31DC3C5AB00DB3DBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFE194CB1DC3C5AB00DB3DBF;
+			remoteInfo = RubikSwift;
+		};
 		BFE194D71DC3C5AB00DB3DBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFE194C31DC3C5AB00DB3DBF /* Project object */;
@@ -29,11 +43,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BF9E08E61DC51F23001C0946 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BF9E08E71DC51F2B001C0946 /* RubikSwift.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		BF0F33411DC403AB00974B54 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		BF0F33431DC40E6600974B54 /* GeneticsSolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneticsSolver.swift; sourceTree = "<group>"; };
 		BF0F33451DC410F500974B54 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
 		BF0F33471DC412A800974B54 /* GeneticsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneticsTests.swift; sourceTree = "<group>"; };
+		BF9E08D11DC51E4E001C0946 /* RubikSwiftTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RubikSwiftTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9E08D31DC51E4E001C0946 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BF9E08D51DC51E4E001C0946 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BF9E08D81DC51E4E001C0946 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BF9E08DA1DC51E4E001C0946 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BF9E08DD1DC51E4E001C0946 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BF9E08DF1DC51E4E001C0946 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubikSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RubikSwift.h; sourceTree = "<group>"; };
 		BFE194D01DC3C5AB00DB3DBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -46,6 +80,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BF9E08CE1DC51E4E001C0946 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF9E08E51DC51F20001C0946 /* RubikSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE194C81DC3C5AB00DB3DBF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -73,11 +115,25 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		BF9E08D21DC51E4E001C0946 /* RubikSwiftTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				BF9E08D31DC51E4E001C0946 /* AppDelegate.swift */,
+				BF9E08D51DC51E4E001C0946 /* ViewController.swift */,
+				BF9E08D71DC51E4E001C0946 /* Main.storyboard */,
+				BF9E08DA1DC51E4E001C0946 /* Assets.xcassets */,
+				BF9E08DC1DC51E4E001C0946 /* LaunchScreen.storyboard */,
+				BF9E08DF1DC51E4E001C0946 /* Info.plist */,
+			);
+			path = RubikSwiftTestApp;
+			sourceTree = "<group>";
+		};
 		BFE194C21DC3C5AB00DB3DBF = {
 			isa = PBXGroup;
 			children = (
 				BFE194CE1DC3C5AB00DB3DBF /* RubikSwift */,
 				BFE194D91DC3C5AB00DB3DBF /* RubikSwiftTests */,
+				BF9E08D21DC51E4E001C0946 /* RubikSwiftTestApp */,
 				BFE194CD1DC3C5AB00DB3DBF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,6 +143,7 @@
 			children = (
 				BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */,
 				BFE194D51DC3C5AB00DB3DBF /* RubikSwiftTests.xctest */,
+				BF9E08D11DC51E4E001C0946 /* RubikSwiftTestApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,6 +194,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		BF9E08D01DC51E4E001C0946 /* RubikSwiftTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF9E08E01DC51E4E001C0946 /* Build configuration list for PBXNativeTarget "RubikSwiftTestApp" */;
+			buildPhases = (
+				BF9E08CD1DC51E4E001C0946 /* Sources */,
+				BF9E08CE1DC51E4E001C0946 /* Frameworks */,
+				BF9E08CF1DC51E4E001C0946 /* Resources */,
+				BF9E08E61DC51F23001C0946 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF9E08E41DC51F1C001C0946 /* PBXTargetDependency */,
+			);
+			name = RubikSwiftTestApp;
+			productName = RubikSwiftTestApp;
+			productReference = BF9E08D11DC51E4E001C0946 /* RubikSwiftTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BFE194CB1DC3C5AB00DB3DBF /* RubikSwift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFE194E01DC3C5AB00DB3DBF /* Build configuration list for PBXNativeTarget "RubikSwift" */;
@@ -183,6 +259,11 @@
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Javier Soto";
 				TargetAttributes = {
+					BF9E08D01DC51E4E001C0946 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 6V6XY979JQ;
+						ProvisioningStyle = Automatic;
+					};
 					BFE194CB1DC3C5AB00DB3DBF = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 6V6XY979JQ;
@@ -202,6 +283,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = BFE194C21DC3C5AB00DB3DBF;
 			productRefGroup = BFE194CD1DC3C5AB00DB3DBF /* Products */;
@@ -210,11 +292,22 @@
 			targets = (
 				BFE194CB1DC3C5AB00DB3DBF /* RubikSwift */,
 				BFE194D41DC3C5AB00DB3DBF /* RubikSwiftTests */,
+				BF9E08D01DC51E4E001C0946 /* RubikSwiftTestApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BF9E08CF1DC51E4E001C0946 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF9E08DE1DC51E4E001C0946 /* LaunchScreen.storyboard in Resources */,
+				BF9E08DB1DC51E4E001C0946 /* Assets.xcassets in Resources */,
+				BF9E08D91DC51E4E001C0946 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE194CA1DC3C5AB00DB3DBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +325,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BF9E08CD1DC51E4E001C0946 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF9E08D61DC51E4E001C0946 /* ViewController.swift in Sources */,
+				BF9E08D41DC51E4E001C0946 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFE194C71DC3C5AB00DB3DBF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +359,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BF9E08E41DC51F1C001C0946 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFE194CB1DC3C5AB00DB3DBF /* RubikSwift */;
+			targetProxy = BF9E08E31DC51F1C001C0946 /* PBXContainerItemProxy */;
+		};
 		BFE194D81DC3C5AB00DB3DBF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BFE194CB1DC3C5AB00DB3DBF /* RubikSwift */;
@@ -264,7 +371,52 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		BF9E08D71DC51E4E001C0946 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF9E08D81DC51E4E001C0946 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BF9E08DC1DC51E4E001C0946 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF9E08DD1DC51E4E001C0946 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		BF9E08E11DC51E4E001C0946 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6V6XY979JQ;
+				INFOPLIST_FILE = RubikSwiftTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = es.javisoto.RubikSwiftTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		BF9E08E21DC51E4E001C0946 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6V6XY979JQ;
+				INFOPLIST_FILE = RubikSwiftTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = es.javisoto.RubikSwiftTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 		BFE194DE1DC3C5AB00DB3DBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -434,6 +586,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BF9E08E01DC51E4E001C0946 /* Build configuration list for PBXNativeTarget "RubikSwiftTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF9E08E11DC51E4E001C0946 /* Debug */,
+				BF9E08E21DC51E4E001C0946 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		BFE194C61DC3C5AB00DB3DBF /* Build configuration list for PBXProject "RubikSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

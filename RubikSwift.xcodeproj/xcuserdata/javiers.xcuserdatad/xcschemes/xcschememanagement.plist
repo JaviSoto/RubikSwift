@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>RubikSwiftTestApp.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>RubikSwiftTests.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +28,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>BF0F334C1DC41C6E00974B54</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BF9E08D01DC51E4E001C0946</key>
 		<dict>
 			<key>primary</key>
 			<true/>
