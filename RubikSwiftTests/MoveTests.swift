@@ -31,12 +31,12 @@ class MoveTests: XCTestCase {
     }
 
     func assertMovesCancelOut(in face: Face, magnitudes: [Move.Magnitude]) {
-        let initialCube = Cube.unscrumbledCube
+        let initialCube = Cube.unscrambledCube
         var cube = initialCube
 
-        for magnitude in magnitudes {
-            cube.apply(Move(face: face, magnitude: magnitude))
-        }
+        let moves = magnitudes.map { Move(face: face, magnitude: $0) }
+
+        cube.apply(moves)
 
         XCTAssertEqual(cube, initialCube)
     }
@@ -90,25 +90,17 @@ class MoveTests: XCTestCase {
     }
 
     func testRandomMovesAndTheirOpposites() {
-        let initialCube = Cube.unscrumbledCube
+        let initialCube = Cube.unscrambledCube
         var cube = initialCube
 
         let numberOfMoves = 250
         let randomMoves: [Move] = (1..<numberOfMoves)
-            .map { _ in return Move(face: Face.all.random, magnitude: Move.Magnitude.all.random) }
+            .map { _ in return Move.random }
 
         let oppositeMoves = randomMoves.reversed().map { $0.opposite }
 
-        for move in randomMoves + oppositeMoves {
-            cube.apply(move)
-        }
+        cube.apply(randomMoves + oppositeMoves)
 
         XCTAssertEqual(cube, initialCube)
-    }
-}
-
-extension Array {
-    var random: Element {
-        return self[Int(arc4random_uniform(UInt32(self.count - 1)))]
     }
 }

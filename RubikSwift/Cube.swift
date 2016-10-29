@@ -178,8 +178,8 @@ public struct CornerPieceCollection {
 
 public struct Cube {
     public struct Pieces {
-        static let numberOfEdges = 12
-        static let numberOfCorners = 8
+        static let numberOfEdges = EdgeLocation.all.count
+        static let numberOfCorners = CornerLocation.all.count
 
         public var edges: EdgePieceCollection
         public var corners: CornerPieceCollection
@@ -284,15 +284,22 @@ extension CornerPiece: Equatable {
 extension EdgeLocation {
     static let all: Set<EdgeLocation> = [.topRight, .topFront, .topLeft, .topBack, .middleRightFront, .middleLeftFront, .middleLeftBack, .middleRightBack, .bottomRight, .bottomFront, .bottomLeft, .bottomBack]
 
+    fileprivate static let topEdges: [EdgeLocation] = [.topRight, .topFront, .topLeft, .topBack]
+    fileprivate static let bottomEdges: [EdgeLocation] = [.bottomFront, .bottomRight, .bottomBack, .bottomLeft]
+    fileprivate static let leftEdges: [EdgeLocation] = [.topLeft, .middleLeftFront, .bottomLeft, .middleLeftBack]
+    fileprivate static let rightEdges: [EdgeLocation] = [.topRight, .middleRightBack, .bottomRight, .middleRightFront]
+    fileprivate static let frontEdges: [EdgeLocation] = [.topFront, .middleRightFront, .bottomFront, .middleLeftFront]
+    fileprivate static let backEdges: [EdgeLocation] = [.topBack, .middleLeftBack, .bottomBack, .middleRightBack]
+
     // Sorted clockwise
     static func locations(in face: Face) -> [EdgeLocation] {
         switch face {
-        case .top: return [.topRight, .topFront, .topLeft, .topBack]
-        case .bottom: return [.bottomFront, .bottomRight, .bottomBack, .bottomLeft]
-        case .left: return [.topLeft, .middleLeftFront, .bottomLeft, .middleLeftBack]
-        case .right: return [.topRight, .middleRightBack, .bottomRight, .middleRightFront]
-        case .front: return [.topFront, .middleRightFront, .bottomFront, .middleLeftFront]
-        case .back: return [.topBack, .middleLeftBack, .bottomBack, .middleRightBack]
+        case .top: return EdgeLocation.topEdges
+        case .bottom: return EdgeLocation.bottomEdges
+        case .left: return EdgeLocation.leftEdges
+        case .right: return EdgeLocation.rightEdges
+        case .front: return EdgeLocation.frontEdges
+        case .back: return EdgeLocation.backEdges
         }
     }
 }
@@ -300,15 +307,48 @@ extension EdgeLocation {
 extension CornerLocation {
     static let all: Set<CornerLocation> = [.topRightFront, .topLeftFront, .topLeftBack, .topRightBack, .bottomRightFront, .bottomLeftFront, .bottomLeftBack, .bottomRightBack]
 
+    fileprivate static let topCorners: [CornerLocation] = [.topRightFront, .topLeftFront, .topLeftBack, .topRightBack]
+    fileprivate static let bottomCorners: [CornerLocation] = [.bottomLeftFront, .bottomRightFront, .bottomRightBack, .bottomLeftBack]
+    fileprivate static let leftCorners: [CornerLocation] = [.topLeftBack, .topLeftFront, .bottomLeftFront, .bottomLeftBack]
+    fileprivate static let rightCorners: [CornerLocation] = [.topRightFront, .topRightBack, .bottomRightBack, .bottomRightFront]
+    fileprivate static let frontCorners: [CornerLocation] = [.topLeftFront, .topRightFront, .bottomRightFront, .bottomLeftFront]
+    fileprivate static let backCorners: [CornerLocation] = [.topRightBack, .topLeftBack, .bottomLeftBack, .bottomRightBack]
+
     // Sorted clockwise
     static func locations(in face: Face) -> [CornerLocation] {
         switch face {
-        case .top: return [.topRightFront, .topLeftFront, .topLeftBack, .topRightBack]
-        case .bottom: return [.bottomLeftFront, .bottomRightFront, .bottomRightBack, .bottomLeftBack]
-        case .left: return [.topLeftBack, .topLeftFront, .bottomLeftFront, .bottomLeftBack]
-        case .right: return [.topRightFront, .topRightBack, .bottomRightBack, .bottomRightFront]
-        case .front: return [.topLeftFront, .topRightFront, .bottomRightFront, .bottomLeftFront]
-        case .back: return [.topRightBack, .topLeftBack, .bottomLeftBack, .bottomRightBack]
+        case .top: return CornerLocation.topCorners
+        case .bottom: return CornerLocation.bottomCorners
+        case .left: return CornerLocation.leftCorners
+        case .right: return CornerLocation.rightCorners
+        case .front: return CornerLocation.frontCorners
+        case .back: return CornerLocation.backCorners
+        }
+    }
+}
+
+extension Face {
+    func contains(_ edgeLocation: EdgeLocation) -> Bool {
+        switch (self, edgeLocation) {
+        case (.top, .topRight), (.top, .topFront), (.top, .topLeft), (.top, .topBack): return true
+        case (.bottom, .bottomFront), (.bottom, .bottomRight), (.bottom, .bottomBack), (.bottom, .bottomLeft): return true
+        case (.left, .topLeft), (.left, .middleLeftFront), (.left, .bottomLeft), (.left, .middleLeftBack): return true
+        case (.right, .topRight), (.right, .middleRightBack), (.right, .bottomRight), (.right, .middleRightFront): return true
+        case (.front, .topFront), (.front, .middleRightFront), (.front, .bottomFront), (.front, .middleLeftFront): return true
+        case (.back, .topBack), (.back, .middleLeftBack), (.back, .bottomBack), (.back, .middleRightBack): return true
+        default: return false
+        }
+    }
+
+    func contains(_ cornerLocation: CornerLocation) -> Bool {
+        switch (self, cornerLocation) {
+        case (.top, .topRightFront), (.top, .topLeftFront), (.top, .topLeftBack), (.top, .topRightBack): return true
+        case (.bottom, .bottomLeftFront), (.bottom, .bottomRightFront), (.bottom, .bottomRightBack), (.bottom, .bottomLeftBack): return true
+        case (.left, .topLeftBack), (.left, .topLeftFront), (.left, .bottomLeftFront), (.left, .bottomLeftBack): return true
+        case (.right, .topRightFront), (.right, .topRightBack), (.right, .bottomRightBack), (.right, .bottomRightFront): return true
+        case (.front, .topLeftFront), (.front, .topRightFront), (.front, .bottomRightFront), (.front, .bottomLeftFront): return true
+        case (.back, .topRightBack), (.back, .topLeftBack), (.back, .bottomLeftBack), (.back, .bottomRightBack): return true
+        default: return false
         }
     }
 }

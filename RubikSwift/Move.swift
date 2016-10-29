@@ -127,38 +127,34 @@ extension Face {
 
 extension Cube {
     public mutating func apply(_ move: Move) {
-        for _ in 1...move.magnitude.numberOfClockwiseQuarterTurns {
-            // 1. Alter orientation
-            if move.face.clockwiseTurnAffectsEdgeOrientation {
-                self.flipEdges(in: move.face)
-            }
-
-            self.rotateCorners(in: move.face)
-
-            // 2. Move
-            self.rotatePiecesClockwise(in: move.face)
-        }
+        self.apply([move])
     }
 
     public mutating func apply(_ moves: [Move]) {
         for move in moves {
-            self.apply(move)
+            for _ in 1...move.magnitude.numberOfClockwiseQuarterTurns {
+                // 1. Alter orientation
+                if move.face.clockwiseTurnAffectsEdgeOrientation {
+                    self.flipEdges(in: move.face)
+                }
+
+                self.rotateCorners(in: move.face)
+
+                // 2. Move
+                self.rotatePiecesClockwise(in: move.face)
+            }
         }
     }
 }
 
 extension Cube {
     mutating func flipEdges(in face: Face) {
-        let edgeLocations = Set(EdgeLocation.locations(in: face))
-
-        self.pieces.edges.map { edgeLocations.contains($0) ? $1.flipped : $1 }
+        self.pieces.edges.map { face.contains($0) ? $1.flipped : $1 }
     }
 
     mutating func rotateCorners(in face: Face) {
-        let cornerLocations = Set(CornerLocation.locations(in: face))
-
         self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
-            guard cornerLocations.contains(location) else { return corner }
+            guard face.contains(location) else { return corner }
 
             let rotation = face.cornerOrientationChangeAfterClockwiseTurn(in: location)
 
@@ -167,19 +163,18 @@ extension Cube {
     }
 
     mutating func rotatePiecesClockwise(in face: Face) {
-        let piecesBeforeRotation = self.pieces
-        var rotatedPieces = piecesBeforeRotation
+        var rotatedPieces = self.pieces
 
         let edgeLocations = EdgeLocation.locations(in: face)
         let cornerLocations = CornerLocation.locations(in: face)
 
         // This relies on the fact that the locations are returned in clockwise order
         for (index, edgeLocation) in edgeLocations.enumerated() {
-            rotatedPieces.edges[edgeLocations[wrapping: index + 1]] = piecesBeforeRotation.edges[edgeLocation]
+            rotatedPieces.edges[edgeLocations[wrapping: index + 1]] = self.pieces.edges[edgeLocation]
         }
 
         for (index, cornerLocation) in cornerLocations.enumerated() {
-            rotatedPieces.corners[cornerLocations[wrapping: index + 1]] = piecesBeforeRotation.corners[cornerLocation]
+            rotatedPieces.corners[cornerLocations[wrapping: index + 1]] = self.pieces.corners[cornerLocation]
         }
 
         self.pieces = rotatedPieces
