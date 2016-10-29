@@ -9,7 +9,7 @@
 import Foundation
 
 public typealias Algorithm = [Move]
-public typealias Fitness = Double
+public typealias Fitness = Int
 
 public final class Solver {
     public let scrambledCube: Cube
@@ -17,7 +17,7 @@ public final class Solver {
 
     public private(set) var currentGeneration = 0
 
-    public private(set) var individuals: [Individual] = []
+    // Always sorted by fitness
     public private(set) var fitnessByIndividuals: [(Individual, Fitness)] = []
 
     public init(scrambledCube: Cube, individuals: Int) {
@@ -34,51 +34,78 @@ public final class Solver {
     public func runGeneration() {
         let numberOfIndividualsToKill = Int(Double(self.numberOfIndividuals) / 1.3)
 
-        if !self.individuals.isEmpty {
-            self.individuals.removeLast(numberOfIndividualsToKill)
+        if !self.fitnessByIndividuals.isEmpty {
+            self.fitnessByIndividuals.removeLast(numberOfIndividualsToKill)
         }
 
-        let mutate = self.individuals + self.individuals
-        self.individuals.append(contentsOf: mutate.map { $0.mutate() })
+        var individuals = self.fitnessByIndividuals.map { $0.0 }
+
+        let mutate = individuals + individuals
+        individuals.append(contentsOf: mutate.map { $0.mutate() })
 
         // Add random ones to keep the population constant
-        if self.individuals.count < self.numberOfIndividuals {
-            self.individuals.append(contentsOf: (self.makeRandomIndividuals(self.numberOfIndividuals - self.individuals.count)))
-        }
+        precondition(individuals.count < self.numberOfIndividuals)
+        individuals.append(contentsOf: (self.makeRandomIndividuals(self.numberOfIndividuals - individuals.count)))
 
-        self.fitnessByIndividuals = self.calculateFitnessByIndividuals()
-        self.individuals = self.fitnessByIndividuals.map { $0.0 }
-        
+        self.fitnessByIndividuals = self.calculateFitnessByIndividuals(individuals)
         self.currentGeneration += 1
     }
 
     private let serialQueue = DispatchQueue(label: "es.javisoto.GeneticsSolver.serial")
 
-    private func calculateFitnessByIndividuals() -> [(Individual, Fitness)] {
+    // Returns the list of individuals and their fitness sorted by their descending fitness
+    private func calculateFitnessByIndividuals(_ individuals: [Individual]) -> [(Individual, Fitness)] {
         var fitnessByIndividuals: [(Individual, Fitness)] = []
 
         let group = DispatchGroup()
         group.enter()
-        DispatchQueue.concurrentPerform(iterations: self.individuals.count) { index in
+        DispatchQueue.concurrentPerform(iterations: individuals.count) { index in
             group.enter()
-            let individual = self.individuals[index]
+            let individual = individuals[index]
             let fitness = individual.fitness(solvingCube: self.scrambledCube)
 
+            let individualWithFitness = (individual, fitness)
+
             serialQueue.async() {
-                fitnessByIndividuals.append(individual, fitness)
+                let indexToInsertAt = fitnessByIndividuals.indexOfLastElement(biggerThan: individualWithFitness) { $0.1 > fitness }
+
+                fitnessByIndividuals.insert(individualWithFitness, at: indexToInsertAt ?? 0)
                 group.leave()
             }
         }
         group.leave()
         group.wait()
 
-        return fitnessByIndividuals.sorted { $0.1 > $1.1 }
+        return fitnessByIndividuals
+    }
+}
+
+extension Array {
+    fileprivate func indexOfLastElement(biggerThan element: Element, isBigger: (Element) -> Bool) -> Int? {
+        var left = self.startIndex
+        var right = self.endIndex - 1
+
+        var indexOfLastSmallerElement: Int? = nil
+
+        while left <= right {
+            let currentIndex = (left + right) / 2
+            let candidate = self[currentIndex]
+
+            if isBigger(candidate) {
+                left = currentIndex + 1
+                indexOfLastSmallerElement = currentIndex + 1
+            } else {
+                right = currentIndex - 1
+            }
+        }
+        
+        return indexOfLastSmallerElement
     }
 }
 
 public final class Individual {
     // public let ID = UUID()
-    public fileprivate(set) var algorithm: Algorithm
+    public let algorithm: Algorithm
 
     init(algorithm: Algorithm) {
         self.algorithm = algorithm
@@ -91,36 +118,39 @@ extension Individual {
         var cubeAfterApplyingAlgorithm = cube
         cubeAfterApplyingAlgorithm.apply(self.algorithm)
 
-        return Double(cubeAfterApplyingAlgorithm.numberOfSolvedPieces)
+        return cubeAfterApplyingAlgorithm.numberOfSolvedPieces
     }
 }
 
 extension Individual {
-    fileprivate static let chancesOfMoveRemoval = 100
+    fileprivate static let chancesOfMoveRemoval = 10
     fileprivate static let chancesOfMoveAddition = 100
-    fileprivate static let maxMovesToAdd = 50
+    fileprivate static let maxMovesToAdd = 30
     fileprivate static let minMovesToAdd = 10
-    fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 20
+    fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 10
 
     func mutate() -> Individual {
-        let individual = Individual(algorithm: self.algorithm)
+        var algorithm = self.algorithm
 
-        let randomNumber = Int(arc4random() % 100)
+        let randomNumber = Int.random(in: 0...100)
 
-        if randomNumber <= Individual.chancesOfMoveRemoval {
-            individual.algorithm.remove(at: Array(individual.algorithm.indices).count - 1)
+        let removeMove = randomNumber <= Individual.chancesOfMoveRemoval
+        if removeMove {
+            algorithm.remove(at: Array(algorithm.indices).count - 1)
         }
 
-        if randomNumber <= Individual.chancesOfMoveAddition {
+        let addMoves = randomNumber <= Individual.chancesOfMoveAddition
+        if addMoves {
             let movesToAdd = Move.randomMoves(count: Int.random(in: Individual.minMovesToAdd...Individual.maxMovesToAdd))
 
             for move in movesToAdd {
-                let index = randomNumber <= Individual.chancesOfMoveAdditionHappensAtRandomIndex && !individual.algorithm.isEmpty ? Array(individual.algorithm.indices).random : individual.algorithm.endIndex
+                let insertAtRandomIndex = randomNumber <= Individual.chancesOfMoveAdditionHappensAtRandomIndex && !algorithm.isEmpty
+                let index = insertAtRandomIndex ? Int.random(in: algorithm.startIndex...algorithm.endIndex) : algorithm.endIndex
 
-                individual.algorithm.insert(move, at: index)
+                algorithm.insert(move, at: index)
             }
         }
 
-        return individual
+        return Individual(algorithm: algorithm)
     }
 }

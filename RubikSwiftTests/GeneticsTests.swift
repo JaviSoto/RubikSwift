@@ -23,18 +23,20 @@ class GeneticsTests: XCTestCase {
         let solver = Solver(scrambledCube: cube, individuals: 5000)
 
         for generation in 1...50000 {
-            solver.runGeneration()
+            autoreleasepool {
+                solver.runGeneration()
 
-            let fitnessByIndividuals = solver.fitnessByIndividuals
+                let fitnessByIndividuals = solver.fitnessByIndividuals
 
-            if generation % 100 == 0 {
-                let averageFitness = avg(fitnessByIndividuals.map { $0.1 })
-                print("\(generation): \(fitnessByIndividuals.first!.0.algorithm) (\(fitnessByIndividuals.first!.1), avg \(averageFitness))")
+                if generation % 100 == 0 {
+                    let averageFitness = avg(fitnessByIndividuals.map { $0.1 })
+                    print("\(generation): \(fitnessByIndividuals.first!.0.algorithm) (\(fitnessByIndividuals.first!.1), avg \(averageFitness))")
+                }
             }
         }
     }
 }
 
-fileprivate func avg(_ n: [Double]) -> Double {
-    return n.reduce(0, +) / Double(n.count)
+fileprivate func avg(_ n: [Int]) -> Double {
+    return Double(n.reduce(0, +)) / Double(n.count)
 }
