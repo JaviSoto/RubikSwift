@@ -33,7 +33,7 @@ public final class Solver {
     public func runGeneration() {
         let numberOfIndividualsToKill = Int(Double(self.numberOfIndividuals) / 1.3)
 
-        self.individuals.sort { $0.fitness(solvingCube: self.scrambledCube) > $1.fitness(solvingCube: self.scrambledCube) }
+        self.individuals = self.fitnessByIndividuals.map { $0.0 }
 
         if !self.individuals.isEmpty {
             self.individuals.removeLast(numberOfIndividualsToKill)
@@ -50,8 +50,27 @@ public final class Solver {
         self.currentGeneration += 1
     }
 
+    private let serialQueue = DispatchQueue(label: "es.javisoto.GeneticsSolver.serial")
+
     public var fitnessByIndividuals: [(Individual, Fitness)] {
-        return self.individuals.map { ($0, $0.fitness(solvingCube: self.scrambledCube)) }.sorted { $0.1 > $1.1 }
+        var fitnessByIndividuals: [(Individual, Fitness)] = []
+
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.concurrentPerform(iterations: self.individuals.count) { index in
+            group.enter()
+            let individual = self.individuals[index]
+            let fitness = individual.fitness(solvingCube: self.scrambledCube)
+
+            serialQueue.async() {
+                fitnessByIndividuals.append(individual, fitness)
+                group.leave()
+            }
+        }
+        group.leave()
+        group.wait()
+
+        return fitnessByIndividuals.sorted { $0.1 > $1.1 }
     }
 }
 
@@ -70,14 +89,14 @@ extension Individual {
         var cubeAfterApplyingAlgorithm = cube
         cubeAfterApplyingAlgorithm.apply(self.algorithm)
 
-        return Double(cubeAfterApplyingAlgorithm.numberOfSolvedPieces) + (Double(cubeAfterApplyingAlgorithm.numberOfPiecesInCorrectLocation) / 10)
+        return Double(cubeAfterApplyingAlgorithm.numberOfSolvedPieces)
     }
 }
 
 extension Individual {
     fileprivate static let chancesOfMoveRemoval = 60
     fileprivate static let chancesOfMoveAddition = 90
-    fileprivate static let maxMovesToAdd = 8
+    fileprivate static let maxMovesToAdd = 20
     fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 90
 
     func mutate() -> Individual {

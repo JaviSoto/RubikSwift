@@ -20,14 +20,14 @@ class GeneticsTests: XCTestCase {
 
         print("Cube: \(scrambleMoves)")
 
-        let solver = Solver(scrambledCube: cube, individuals: 100)
+        let solver = Solver(scrambledCube: cube, individuals: 1000)
 
         for generation in 1...50000 {
             solver.runGeneration()
 
             let fitnessByIndividuals = solver.fitnessByIndividuals
 
-            if generation % 100 == 0 {
+            if generation % 10 == 0 {
                 let averageFitness = avg(fitnessByIndividuals.map { $0.1 })
                 print("\(generation): \(fitnessByIndividuals.first!.0.algorithm) (\(fitnessByIndividuals.first!.1), avg \(averageFitness))")
             }
