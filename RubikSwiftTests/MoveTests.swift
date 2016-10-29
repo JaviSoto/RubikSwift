@@ -97,10 +97,48 @@ class MoveTests: XCTestCase {
         let randomMoves: [Move] = (1..<numberOfMoves)
             .map { _ in return Move.random }
 
-        let oppositeMoves = randomMoves.reversed().map { $0.opposite }
+        let oppositeMoves = randomMoves.opposite
 
         cube.apply(randomMoves + oppositeMoves)
 
         XCTAssertEqual(cube, initialCube)
+    }
+
+    func testTAlgorithm() {
+        let initialCube = Cube.unscrambledCube
+
+        let afterAlgorithm = initialCube.applying(Move.moves("R U R' U' R' F R2 U' R' U' R U R' F'")!)
+
+        XCTAssertFalse(afterAlgorithm.pieces.corners.all.contains { $0.orientation != .correct })
+    }
+
+    func testCornerPermutation() {
+        let initialCube = Cube.unscrambledCube
+
+        let afterAlgorithm = initialCube.applying(Move.moves("F U")!)
+
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topRightFront.orientation, .correct)
+    }
+
+    func testOLL1() {
+        let initialCube = Cube.unscrambledCube
+
+        let afterAlgorithm = initialCube.applying(Move.moves("F R U R' U' F'")!.opposite)
+
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topRightFront.orientation, .correct)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topLeftFront.orientation, .rotatedCounterClockwise)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topLeftBack.orientation, .rotatedClockwise)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topRightBack.orientation, .correct)
+    }
+
+    func testOLL2() {
+        let initialCube = Cube.unscrambledCube
+
+        let afterAlgorithm = initialCube.applying(Move.moves("R' F R2 B' R2 F' R2 B R'")!.opposite)
+
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topRightFront.orientation, .rotatedClockwise)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topLeftFront.orientation, .rotatedClockwise)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topLeftBack.orientation, .rotatedCounterClockwise)
+        XCTAssertEqual(afterAlgorithm.pieces.corners.topRightBack.orientation, .rotatedCounterClockwise)
     }
 }

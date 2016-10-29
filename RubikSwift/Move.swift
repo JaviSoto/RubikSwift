@@ -99,26 +99,26 @@ extension Face {
         case .top, .bottom: return .correct
         case .front:
             switch location {
-            case .topLeftFront, .bottomRightFront: return .rotatedClockwise
             case .topRightFront, .bottomLeftFront: return .rotatedCounterClockwise
+            case .topLeftFront, .bottomRightFront: return .rotatedClockwise
             default: fatalError("Invalid location for the front face")
             }
         case .back:
             switch location {
-            case .topLeftBack, .bottomLeftBack: return .rotatedCounterClockwise
-            case .topRightBack, .bottomRightBack: return .rotatedClockwise
+            case .topRightBack, .bottomLeftBack: return .rotatedClockwise
+            case .topLeftBack, .bottomRightBack: return .rotatedCounterClockwise
             default: fatalError("Invalid location for the back face")
             }
         case .left:
             switch location {
-            case .topLeftFront, .topLeftBack: return .rotatedClockwise
-            case .bottomLeftFront, .bottomLeftBack: return .rotatedCounterClockwise
+            case .topLeftFront, .bottomLeftBack: return .rotatedCounterClockwise
+            case .topLeftBack, .bottomLeftFront: return .rotatedClockwise
             default: fatalError("Invalid location for the left face")
             }
         case .right:
             switch location {
-            case .topRightFront, .topRightBack: return .rotatedClockwise
-            case .bottomRightFront, .bottomRightBack: return .rotatedCounterClockwise
+            case .topRightFront, .bottomRightBack: return .rotatedClockwise
+            case .topRightBack, .bottomRightFront: return .rotatedCounterClockwise
             default: fatalError("Invalid location for the right face")
             }
         }
@@ -138,12 +138,19 @@ extension Cube {
                     self.flipEdges(in: move.face)
                 }
 
-                self.rotateCorners(in: move.face)
+                self.rotateCornersClockwise(in: move.face)
 
-                // 2. Move
-                self.rotatePiecesClockwise(in: move.face)
+                // 2. Permute
+                self.permutatePiecesClockwise(in: move.face)
             }
         }
+    }
+
+    public func applying(_ moves: [Move]) -> Cube {
+        var cube = self
+        cube.apply(moves)
+
+        return cube
     }
 }
 
@@ -152,7 +159,7 @@ extension Cube {
         self.pieces.edges.map { face.contains($0) ? $1.flipped : $1 }
     }
 
-    mutating func rotateCorners(in face: Face) {
+    mutating func rotateCornersClockwise(in face: Face) {
         self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
             guard face.contains(location) else { return corner }
 
@@ -162,7 +169,7 @@ extension Cube {
         }
     }
 
-    mutating func rotatePiecesClockwise(in face: Face) {
+    mutating func permutatePiecesClockwise(in face: Face) {
         var rotatedPieces = self.pieces
 
         let edgeLocations = EdgeLocation.locations(in: face)
@@ -188,6 +195,57 @@ extension Move.Magnitude: CustomStringConvertible {
         case .counterClockwiseQuarterTurn: return "'"
         case .halfTurn: return "2"
         }
+    }
+}
+
+extension Move {
+    public init?(_ string: String) {
+        guard string.characters.count <= 2 else { return nil }
+        guard let firstCharacter = string.characters.first.map( { String($0) }) else { return nil }
+
+        let face: Face
+        let magnitude: Magnitude
+
+        switch firstCharacter {
+        case "U": face = .top
+        case "D": face = .bottom
+        case "L": face = .left
+        case "R": face = .right
+        case "F": face = .front
+        case "B": face = .back
+        default: return nil
+        }
+
+        if string.characters.count > 1 {
+            switch string.characters.last {
+            case .none: magnitude = .clockwiseQuarterTurn
+            case .some("'"): magnitude = .counterClockwiseQuarterTurn
+            case .some("2"): magnitude = .halfTurn
+            default: return nil
+            }
+        } else {
+            magnitude = .clockwiseQuarterTurn
+        }
+
+        self = Move(face: face, magnitude: magnitude)
+    }
+
+    public static func moves(_ string: String) -> [Move]? {
+        let moveStrings = string.components(separatedBy: " ")
+
+        let moves = moveStrings.flatMap(Move.init)
+
+        guard moves.count == moveStrings.count else {
+            return nil
+        }
+        
+        return moves
+    }
+}
+
+extension Collection where Iterator.Element == Move {
+    var opposite: [Move] {
+        return self.reversed().map { $0 .opposite }
     }
 }
 

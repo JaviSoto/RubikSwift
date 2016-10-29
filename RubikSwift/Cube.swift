@@ -130,6 +130,10 @@ public struct EdgePieceCollection {
             self[location] = f(location, self[location])
         }
     }
+
+    public var all: [EdgePiece] {
+        return [self.topRight, self.topFront, self.topLeft, self.topBack, self.middleRightFront, self.middleLeftFront, self.middleLeftBack, self.middleRightBack, self.bottomRight, self.bottomFront, self.bottomLeft, self.bottomBack]
+    }
 }
 
 public struct CornerPieceCollection {
@@ -173,6 +177,10 @@ public struct CornerPieceCollection {
         for location in CornerLocation.all {
             self[location] = f(location, self[location])
         }
+    }
+
+    public var all: [CornerPiece] {
+        return [self.topRightFront, self.topLeftFront, self.topLeftBack, self.topRightBack, self.bottomRightFront, self.bottomLeftFront, self.bottomLeftBack, self.bottomRightBack]
     }
 }
 
@@ -374,26 +382,40 @@ extension Cube {
         return count
     }
 
+    public var numberOfPiecesWithCorrectOrientation: Int {
+        var count = 0
+
+        let edges = self.pieces.edges.all
+        let corners = self.pieces.corners.all
+
+        for edge in edges where edge.orientation == .correct {
+            count += 1
+        }
+
+        for corner in corners where corner.orientation == .correct {
+            count += 1
+        }
+
+        return count
+    }
+
     // The total number of pieces that are in the correct location and orientation
     public var numberOfSolvedPieces: Int {
-        let unscrambled = Cube.unscrambledCube
-
         var count = 0
 
         let edges = self.pieces.edges
         let corners = self.pieces.corners
 
-        let unscrumbledEdges = unscrambled.pieces.edges
-        let unscrumbledCorners = unscrambled.pieces.corners
-
         for edgeLocation in EdgeLocation.all {
-            if unscrumbledEdges[edgeLocation] == edges[edgeLocation] {
+            let edge = edges[edgeLocation]
+            if edge.orientation == .correct && edge.location == edgeLocation {
                 count += 1
             }
         }
 
         for cornerLocation in CornerLocation.all {
-            if unscrumbledCorners[cornerLocation] == corners[cornerLocation] {
+            let corner = corners[cornerLocation]
+            if corner.orientation == .correct && corner.location == cornerLocation {
                 count += 1
             }
         }
