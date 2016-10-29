@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BF0F33421DC403AB00974B54 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33411DC403AB00974B54 /* Array+Extensions.swift */; };
+		BF0F33441DC40E6600974B54 /* GeneticsSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33431DC40E6600974B54 /* GeneticsSolver.swift */; };
 		BF0F33461DC410F500974B54 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33451DC410F500974B54 /* Random.swift */; };
+		BF0F33481DC412A800974B54 /* GeneticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0F33471DC412A800974B54 /* GeneticsTests.swift */; };
 		BFE194D61DC3C5AB00DB3DBF /* RubikSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */; };
 		BFE194DB1DC3C5AB00DB3DBF /* CubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */; };
 		BFE194DD1DC3C5AB00DB3DBF /* RubikSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,7 +31,9 @@
 
 /* Begin PBXFileReference section */
 		BF0F33411DC403AB00974B54 /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		BF0F33431DC40E6600974B54 /* GeneticsSolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneticsSolver.swift; sourceTree = "<group>"; };
 		BF0F33451DC410F500974B54 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		BF0F33471DC412A800974B54 /* GeneticsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneticsTests.swift; sourceTree = "<group>"; };
 		BFE194CC1DC3C5AB00DB3DBF /* RubikSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubikSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFE194CF1DC3C5AB00DB3DBF /* RubikSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RubikSwift.h; sourceTree = "<group>"; };
 		BFE194D01DC3C5AB00DB3DBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 			children = (
 				BFE194DA1DC3C5AB00DB3DBF /* CubeTests.swift */,
 				BFF057381DC3D54C00D4FD2F /* MoveTests.swift */,
+				BF0F33471DC412A800974B54 /* GeneticsTests.swift */,
 				BFE194DC1DC3C5AB00DB3DBF /* Info.plist */,
 			);
 			path = RubikSwiftTests;
@@ -113,6 +118,7 @@
 				BF0F333E1DC3F6FD00974B54 /* Extensions */,
 				BFE194E61DC3C5D700DB3DBF /* Cube.swift */,
 				BFF057361DC3D3A600D4FD2F /* Move.swift */,
+				BF0F33431DC40E6600974B54 /* GeneticsSolver.swift */,
 			);
 			name = Code;
 			sourceTree = "<group>";
@@ -233,6 +239,7 @@
 				BFF057371DC3D3A600D4FD2F /* Move.swift in Sources */,
 				BFE194E71DC3C5D700DB3DBF /* Cube.swift in Sources */,
 				BF0F33461DC410F500974B54 /* Random.swift in Sources */,
+				BF0F33441DC40E6600974B54 /* GeneticsSolver.swift in Sources */,
 				BF0F33421DC403AB00974B54 /* Array+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFF057391DC3D54C00D4FD2F /* MoveTests.swift in Sources */,
+				BF0F33481DC412A800974B54 /* GeneticsTests.swift in Sources */,
 				BFE194DB1DC3C5AB00DB3DBF /* CubeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,7 +380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = es.javisoto.RubikSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;

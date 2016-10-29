@@ -380,14 +380,20 @@ extension Cube {
 
         var count = 0
 
+        let edges = self.pieces.edges
+        let corners = self.pieces.corners
+
+        let unscrumbledEdges = unscrambled.pieces.edges
+        let unscrumbledCorners = unscrambled.pieces.corners
+
         for edgeLocation in EdgeLocation.all {
-            if unscrambled.pieces.edges[edgeLocation] == self.pieces.edges[edgeLocation] {
+            if unscrumbledEdges[edgeLocation] == edges[edgeLocation] {
                 count += 1
             }
         }
 
         for cornerLocation in CornerLocation.all {
-            if unscrambled.pieces.corners[cornerLocation] == self.pieces.corners[cornerLocation] {
+            if unscrumbledCorners[cornerLocation] == corners[cornerLocation] {
                 count += 1
             }
         }
