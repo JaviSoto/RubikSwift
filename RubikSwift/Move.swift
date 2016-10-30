@@ -173,7 +173,7 @@ extension Cube {
 
             let clockwiseTurn = move.magnitude == .clockwiseQuarterTurn
 
-            self.rotateCorners(in: move.face, clockwise: clockwiseTurn)
+            self.rotateCorners(in: move.face)
 
             // 2. Permute
             self.permutatePieces(in: move.face, clockwise: clockwiseTurn)
@@ -193,7 +193,7 @@ extension Cube {
         self.pieces.edges.map { face.contains($0) ? $1.flipped : $1 }
     }
 
-    mutating func rotateCorners(in face: Face, clockwise: Bool) {
+    mutating func rotateCorners(in face: Face) {
         self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
             guard face.contains(location) else { return corner }
 
