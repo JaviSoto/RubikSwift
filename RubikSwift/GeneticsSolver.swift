@@ -9,43 +9,59 @@
 import Foundation
 
 public typealias Algorithm = [Move]
-public typealias Fitness = Int
+public typealias Fitness = Double
 
 public final class Solver {
     public let scrambledCube: Cube
-    fileprivate let numberOfIndividuals: Int
+    fileprivate let populationSize: Int
 
     public private(set) var currentGeneration = 0
 
     // Always sorted by fitness
     public private(set) var fitnessByIndividuals: [(Individual, Fitness)] = []
 
-    public init(scrambledCube: Cube, individuals: Int) {
+    public init(scrambledCube: Cube, populationSize: Int) {
         self.scrambledCube = scrambledCube
-        self.numberOfIndividuals = individuals
-    }
-
-    fileprivate func makeRandomIndividuals(_ count: Int) -> [Individual] {
-        let initialAlgorithmLength = 15
-
-        return (0..<count).map { _ in return Individual(algorithm: Move.randomMoves(count: initialAlgorithmLength)) }
+        self.populationSize = populationSize
     }
 
     public func runGeneration() {
-        let numberOfIndividualsToKill = Int(Double(self.numberOfIndividuals) / 1.3)
+        // Current approach:
+        // Kill 75% of the "worst" algorithms
+        // Take the top 10% and create 25 mutations for each (we keep the original 10% as well)
+        // Take the remaining 90% and create some mutations for them too, enough to go back to self.populationSize
 
-        if !self.fitnessByIndividuals.isEmpty {
-            self.fitnessByIndividuals.removeLast(numberOfIndividualsToKill)
-        }
+        let percentageOfIndividualsToKill = 0.75
+        let percentageOfTopIndividualsToHaveIncreasedOffspring = 0.1
+        let numberOfOffspringForTopIndividuals = 25
+
+        let numberOfIndividualsToKill = Int(Double(self.populationSize) * percentageOfIndividualsToKill)
+        let populationSizeAfterSelection = self.populationSize - numberOfIndividualsToKill
+        let numberOfIndividualsToHaveIncreasedOffspring = Int(Double(populationSizeAfterSelection) * percentageOfTopIndividualsToHaveIncreasedOffspring)
+        let numberOfOtherIndividuals = populationSizeAfterSelection - numberOfIndividualsToHaveIncreasedOffspring
+        let numberOfTopOffspring = numberOfIndividualsToHaveIncreasedOffspring * numberOfOffspringForTopIndividuals
+        let numberOfOffspringForRemainingIndividuals = Int(ceil(Double(self.populationSize - numberOfIndividualsToHaveIncreasedOffspring - numberOfTopOffspring - numberOfOtherIndividuals) / Double(numberOfOtherIndividuals)))
 
         var individuals = self.fitnessByIndividuals.map { $0.0 }
 
-        let mutate = individuals + individuals
-        individuals.append(contentsOf: mutate.map { $0.mutate() })
+        if individuals.isEmpty {
+            // Initial population
+            individuals = Individual.createRandom(self.populationSize)
+        }
+        else {
+            // Survival of the fittest
+            individuals.removeLast(numberOfIndividualsToKill)
 
-        // Add random ones to keep the population constant
-        precondition(individuals.count < self.numberOfIndividuals)
-        individuals.append(contentsOf: (self.makeRandomIndividuals(self.numberOfIndividuals - individuals.count)))
+            // Mutations
+            let topIndividuals = individuals.prefix(upTo: numberOfIndividualsToHaveIncreasedOffspring)
+            let remainingIndividuals = individuals.suffix(from: numberOfIndividualsToHaveIncreasedOffspring)
+
+            let topIndividualsOffspring = Array(repeating: topIndividuals, count: numberOfOffspringForTopIndividuals).flatMap { $0 }
+            let remainingIndividualsOffspring = Array(repeating: remainingIndividuals, count: numberOfOffspringForRemainingIndividuals).flatMap { $0 }
+
+            let mutants = (topIndividualsOffspring + remainingIndividualsOffspring).prefix(upTo: self.populationSize - individuals.count).map { $0.mutate () }
+            individuals.append(contentsOf: mutants)
+        }
 
         self.fitnessByIndividuals = self.calculateFitnessByIndividuals(individuals)
         self.currentGeneration += 1
@@ -113,26 +129,33 @@ public final class Individual {
 }
 
 extension Individual {
-    // TODO: Half way through the cube could be solved, maybe stop at every step and check?
-    fileprivate func fitness(solvingCube cube: Cube) -> Fitness {
-        var cubeAfterApplyingAlgorithm = cube
-        cubeAfterApplyingAlgorithm.apply(self.algorithm)
+    fileprivate static func createRandom(_ count: Int) -> [Individual] {
+        let initialAlgorithmLength = 5
 
-        return cubeAfterApplyingAlgorithm.numberOfSolvedPieces
+        return (0..<count).map { _ in return Individual(algorithm: Move.randomMoves(count: initialAlgorithmLength)) }
     }
 }
 
 extension Individual {
-    fileprivate static let chancesOfMoveRemoval = 10
+    fileprivate func fitness(solvingCube cube: Cube) -> Fitness {
+        var cubeAfterApplyingAlgorithm = cube
+        cubeAfterApplyingAlgorithm.apply(self.algorithm)
+
+        return Fitness(cubeAfterApplyingAlgorithm.numberOfSolvedPieces)
+    }
+}
+
+extension Individual {
+    fileprivate static let chancesOfMoveRemoval = 1
     fileprivate static let chancesOfMoveAddition = 100
-    fileprivate static let maxMovesToAdd = 30
-    fileprivate static let minMovesToAdd = 10
-    fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 10
+    fileprivate static let minMovesToAdd = 5
+    fileprivate static let maxMovesToAdd = 25
+    fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 1
 
     func mutate() -> Individual {
         var algorithm = self.algorithm
 
-        let randomNumber = Int.random(in: 0...100)
+        let randomNumber = Int.random(in: 1...100)
 
         let removeMove = randomNumber <= Individual.chancesOfMoveRemoval
         if removeMove {
@@ -143,12 +166,10 @@ extension Individual {
         if addMoves {
             let movesToAdd = Move.randomMoves(count: Int.random(in: Individual.minMovesToAdd...Individual.maxMovesToAdd))
 
-            for move in movesToAdd {
-                let insertAtRandomIndex = randomNumber <= Individual.chancesOfMoveAdditionHappensAtRandomIndex && !algorithm.isEmpty
-                let index = insertAtRandomIndex ? Int.random(in: algorithm.startIndex...algorithm.endIndex) : algorithm.endIndex
+            let insertAtRandomIndex = randomNumber <= Individual.chancesOfMoveAdditionHappensAtRandomIndex && !algorithm.isEmpty
+            let index = insertAtRandomIndex ? Int.random(in: algorithm.startIndex...algorithm.endIndex) : algorithm.endIndex
 
-                algorithm.insert(move, at: index)
-            }
+            algorithm.insert(contentsOf: movesToAdd, at: index)
         }
 
         return Individual(algorithm: algorithm)

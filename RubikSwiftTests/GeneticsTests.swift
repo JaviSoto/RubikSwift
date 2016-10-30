@@ -9,9 +9,9 @@
 import XCTest
 @testable import RubikSwift
 
-// Best (14):
-// scramble: [U2, R', L', U2, F', R2, U, R, U2, F2, R', L2, B', U', F2, R2, L, D2, F2, U', R', B, U2, F2, R', B2, R', D2, R', U', D, B2, D2, L', D, R', U2, B', L, B2, F, B', F', L, D', B', U', F, D2, F']
-// solve: [B', L, R', U', D2, B2, B2, U', D, B', R, F, R, R2, F', R, F', D', F, D2, L, R, F', L', R', D2, F2, L, D, L2, F, L2, D]: 14.4
+// Best (15):
+// scramble: Cube: [U, R2, D2, B, D, R2, F', L2, F', L2, F', U', R', L, F2, L2, R', L, B, L2]
+// solve (gen 42655, 69 minutes): New best: [B, L2, B, R2, F', L2, F', D', B', D', U, F2, B2, F2, B', R2, D', F, U', D', U', R', F', R, R2, F', R, L', R, U2, B, U, B', L, D2, U2, D, U, D, L', U, L2, R, L', R'] (15.0)
 
 class GeneticsTests: XCTestCase {
     func testGeneticsSolver() {
@@ -20,23 +20,44 @@ class GeneticsTests: XCTestCase {
 
         print("Cube: \(scrambleMoves)")
 
-        let solver = Solver(scrambledCube: cube, individuals: 5000)
+        let solver = Solver(scrambledCube: cube, populationSize: 2000)
 
-        for generation in 1...50000 {
+        var bestIndividual: (Individual, Fitness)?
+
+        let start = Date()
+
+        // print gens per minute
+        for generation in 1...1000000 {
             autoreleasepool {
                 solver.runGeneration()
 
                 let fitnessByIndividuals = solver.fitnessByIndividuals
 
-                if generation % 100 == 0 {
-                    let averageFitness = avg(fitnessByIndividuals.map { $0.1 })
-                    print("\(generation): \(fitnessByIndividuals.first!.0.algorithm) (\(fitnessByIndividuals.first!.1), avg \(averageFitness))")
+                if bestIndividual == nil || fitnessByIndividuals.first!.1 > bestIndividual!.1 {
+                    bestIndividual = fitnessByIndividuals.first!
+
+                    print("\(generation): New best: \(bestIndividual!.0.algorithm) (\(bestIndividual!.1))")
+                }
+
+                if generation % 50 == 0 {
+                    let elapsed = Date().timeIntervalSince(start)
+                    let elapsedMinutes = elapsed / 60
+                    let generationsPerMinute = Double(generation) / elapsedMinutes
+
+                    let averageFitness = avg(fitnessByIndividuals.map({ $0.1 }).firstHalf)
+                    print("\(generation) (avg fitness \(averageFitness), \(Int(generationsPerMinute)) gens/min, \(Int(elapsedMinutes)) min elapsed)")
                 }
             }
         }
     }
 }
 
-fileprivate func avg(_ n: [Int]) -> Double {
+extension Array {
+    var firstHalf: [Element] {
+        return Array(self[0..<self.endIndex / 2])
+    }
+}
+
+fileprivate func avg(_ n: [Fitness]) -> Double {
     return Double(n.reduce(0, +)) / Double(n.count)
 }
