@@ -39,8 +39,24 @@ public func +(lhs: CornerPiece.Orientation, rhs: CornerPiece.Orientation) -> Cor
     }
 }
 
+public prefix func !(orientation: CornerPiece.Orientation) -> CornerPiece.Orientation {
+    switch orientation {
+    case .correct: return .correct
+    case .rotatedClockwise: return .rotatedCounterClockwise
+    case .rotatedCounterClockwise: return .rotatedClockwise
+    }
+}
+
+public func -(lhs: CornerPiece.Orientation, rhs: CornerPiece.Orientation) -> CornerPiece.Orientation {
+    return lhs + !rhs
+}
+
 public func +(lhs: CornerPiece, rhs: CornerPiece.Orientation) -> CornerPiece {
     return CornerPiece(lhs.location, orientation: lhs.orientation + rhs)
+}
+
+public func -(lhs: CornerPiece, rhs: CornerPiece.Orientation) -> CornerPiece {
+    return CornerPiece(lhs.location, orientation: lhs.orientation - rhs)
 }
 
 public struct Move {
@@ -86,7 +102,7 @@ extension Move.Magnitude {
 // A "sticker" of strong color or regular color in a strong or regular face is considered correct orientation.
 // A "sticker" of a weak color in a strong or regular face is considered in incorrect orientation.
 extension Face {
-    var clockwiseTurnAffectsEdgeOrientation: Bool {
+    var quarterTurnAffectsEdgeOrientation: Bool {
         switch self {
         case .top, .bottom: return false
         case .left, .right: return true
@@ -131,18 +147,36 @@ extension Cube {
     }
 
     public mutating func apply(_ moves: [Move]) {
-        for move in moves {
-            for _ in 1...move.magnitude.numberOfClockwiseQuarterTurns {
-                // 1. Alter orientation
-                if move.face.clockwiseTurnAffectsEdgeOrientation {
-                    self.flipEdges(in: move.face)
-                }
+        // Handle half turns as 2 clockwise turns
+        let effectiveMoves = moves.flatMap { move -> [Move] in
+            var move = move
 
-                self.rotateCornersClockwise(in: move.face)
+            if move.magnitude == .halfTurn {
+                move = Move(face: move.face, magnitude: .clockwiseQuarterTurn)
 
-                // 2. Permute
-                self.permutatePiecesClockwise(in: move.face)
+                return [move, move]
             }
+            else {
+                return [move]
+            }
+        }
+
+        for move in effectiveMoves {
+            precondition(move.magnitude != .halfTurn)
+
+            let shouldFlipEdges = move.face.quarterTurnAffectsEdgeOrientation
+
+            // 1. Alter orientation
+            if shouldFlipEdges {
+                self.flipEdges(in: move.face)
+            }
+
+            let clockwiseTurn = move.magnitude == .clockwiseQuarterTurn
+
+            self.rotateCorners(in: move.face, clockwise: clockwiseTurn)
+
+            // 2. Permute
+            self.permutatePieces(in: move.face, clockwise: clockwiseTurn)
         }
     }
 
@@ -159,7 +193,7 @@ extension Cube {
         self.pieces.edges.map { face.contains($0) ? $1.flipped : $1 }
     }
 
-    mutating func rotateCornersClockwise(in face: Face) {
+    mutating func rotateCorners(in face: Face, clockwise: Bool) {
         self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
             guard face.contains(location) else { return corner }
 
@@ -169,13 +203,18 @@ extension Cube {
         }
     }
 
-    mutating func permutatePiecesClockwise(in face: Face) {
+    mutating func permutatePieces(in face: Face, clockwise: Bool) {
         var rotatedPieces = self.pieces
 
-        let edgeLocations = EdgeLocation.locations(in: face)
-        let cornerLocations = CornerLocation.locations(in: face)
-
         // This relies on the fact that the locations are returned in clockwise order
+        var edgeLocations = EdgeLocation.locations(in: face)
+        var cornerLocations = CornerLocation.locations(in: face)
+
+        if !clockwise {
+            edgeLocations.reverse()
+            cornerLocations.reverse()
+        }
+
         for (index, edgeLocation) in edgeLocations.enumerated() {
             rotatedPieces.edges[edgeLocations[wrapping: index + 1]] = self.pieces.edges[edgeLocation]
         }
