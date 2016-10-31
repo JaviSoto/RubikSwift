@@ -6,7 +6,7 @@
 //  Copyright © 2016 Javier Soto. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for RubikSwift.
 FOUNDATION_EXPORT double RubikSwiftVersionNumber;

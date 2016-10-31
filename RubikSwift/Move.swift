@@ -295,7 +295,7 @@ extension Move: CustomStringConvertible {
 }
 
 extension Collection where Iterator.Element == Move {
-    var description: String {
+    public var sequenceString: String {
         return self.map { $0.description }.joined(separator: " ")
     }
 }

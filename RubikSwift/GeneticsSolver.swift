@@ -31,8 +31,8 @@ public final class Solver {
         // Take the top 10% and create 25 mutations for each (we keep the original 10% as well)
         // Take the remaining 90% and create some mutations for them too, enough to go back to self.populationSize
 
-        let percentageOfIndividualsToKill = 0.75
-        let percentageOfTopIndividualsToHaveIncreasedOffspring = 0.1
+        let percentageOfIndividualsToKill = 0.80
+        let percentageOfTopIndividualsToHaveIncreasedOffspring = 0.10
         let numberOfOffspringForTopIndividuals = 25
 
         let numberOfIndividualsToKill = Int(Double(self.populationSize) * percentageOfIndividualsToKill)
@@ -130,7 +130,7 @@ public final class Individual {
 
 extension Individual {
     fileprivate static func createRandom(_ count: Int) -> [Individual] {
-        let initialAlgorithmLength = 5
+        let initialAlgorithmLength = 1
 
         return (0..<count).map { _ in return Individual(algorithm: Move.randomMoves(count: initialAlgorithmLength)) }
     }
@@ -148,7 +148,8 @@ extension Individual {
 extension Individual {
     fileprivate static let chancesOfMoveRemoval = 1
     fileprivate static let chancesOfMoveAddition = 100
-    fileprivate static let minMovesToAdd = 5
+    // Variate these depending on the "stage" of the solution?
+    fileprivate static let minMovesToAdd = 7
     fileprivate static let maxMovesToAdd = 25
     fileprivate static let chancesOfMoveAdditionHappensAtRandomIndex = 1
 

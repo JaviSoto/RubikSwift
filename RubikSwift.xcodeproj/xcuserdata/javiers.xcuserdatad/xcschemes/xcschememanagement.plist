@@ -9,7 +9,14 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>RubikSwiftTestApp.xcscheme</key>
+		<key>RubikSwiftCLI.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>RubikSwiftCLIBundle.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>3</integer>
@@ -33,6 +40,16 @@
 			<true/>
 		</dict>
 		<key>BF9E08D01DC51E4E001C0946</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BF9E08EB1DC7C70C001C0946</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BF9E08FC1DC7C8C9001C0946</key>
 		<dict>
 			<key>primary</key>
 			<true/>
