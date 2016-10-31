@@ -125,9 +125,14 @@ public struct EdgePieceCollection {
         }
     }
 
-    mutating func map(_ f: (EdgeLocation, EdgePiece) -> EdgePiece) {
-        for location in EdgeLocation.all {
-            self[location] = f(location, self[location])
+    mutating func map(_ face: Face, _ f: (EdgeLocation, EdgePiece) -> EdgePiece) {
+        for location in EdgeLocation.locations(in: face) {
+            let piece = self[location]
+            let newPiece = f(location, piece)
+
+            if newPiece != piece {
+                self[location] = newPiece
+            }
         }
     }
 
@@ -173,9 +178,14 @@ public struct CornerPieceCollection {
         }
     }
 
-    mutating func map(_ f: (CornerLocation, CornerPiece) -> CornerPiece) {
-        for location in CornerLocation.all {
-            self[location] = f(location, self[location])
+    mutating func map(_ face: Face, _ f: (CornerLocation, CornerPiece) -> CornerPiece) {
+        for location in CornerLocation.locations(in: face) {
+            let piece = self[location]
+            let newPiece = f(location, piece)
+
+            if newPiece != piece {
+                self[location] = newPiece
+            }
         }
     }
 

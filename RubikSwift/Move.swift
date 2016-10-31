@@ -79,19 +79,8 @@ public struct Move {
     public let face: Face
     public let magnitude: Magnitude
 
-    var opposite: Move {
+    public var opposite: Move {
         return Move(face: self.face, magnitude: self.magnitude.opposite)
-    }
-}
-
-extension Move.Magnitude {
-    // This allows us to only model clockwise turns, and apply the rest of them as a succesion of clockwise turns.
-    var numberOfClockwiseQuarterTurns: Int {
-        switch self {
-        case .clockwiseQuarterTurn: return 1
-        case .halfTurn: return 2
-        case .counterClockwiseQuarterTurn: return 3
-        }
     }
 }
 
@@ -190,13 +179,11 @@ extension Cube {
 
 extension Cube {
     mutating func flipEdges(in face: Face) {
-        self.pieces.edges.map { face.contains($0) ? $1.flipped : $1 }
+        self.pieces.edges.map(face) { $1.flipped }
     }
 
     mutating func rotateCorners(in face: Face) {
-        self.pieces.corners.map { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
-            guard face.contains(location) else { return corner }
-
+        self.pieces.corners.map(face) { (location: CornerLocation, corner: CornerPiece) -> CornerPiece in
             let rotation = face.cornerOrientationChangeAfterClockwiseTurn(in: location)
 
             return corner + rotation
@@ -283,8 +270,8 @@ extension Move {
 }
 
 extension Collection where Iterator.Element == Move {
-    var opposite: [Move] {
-        return self.reversed().map { $0 .opposite }
+    public var opposite: [Move] {
+        return self.reversed().map { $0.opposite }
     }
 }
 
